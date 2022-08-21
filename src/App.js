@@ -11,7 +11,8 @@ function App() {
 
   const fetchData = async () => {
     const response = await axios.get('http://localhost:8000/restaurants');
-    setRestaurants(response.data.data)
+    const data = Object.keys(response.data.data).map (restaurant => response.data.data[restaurant]);
+    setRestaurants(data)
   }
 
   useEffect(() => {
