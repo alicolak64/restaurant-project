@@ -7,7 +7,6 @@ const morgan = require('morgan');
 const fetch = require('node-fetch');
 require('dotenv').config();
 
-morgan('tiny');
 
 const app = express();
 
@@ -18,13 +17,14 @@ app.use(express.json());
 // get all restaurant data 
 
 app.get('/restaurants' , (req,res) => {
-    const url = "https://df3e8da8-cf7f-4d4b-863f-affb56755c5d-europe-west1.apps.astra.datastax.com/api/rest/v2/namespaces/restaurants/collections/restaurants_info?page-size=20"
+    
+    const url = process.env.ENDPOINT;
 
     const options = {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
-            'X-Cassandra-Token': 'AstraCS:aZydPBtpzixvBZFXCAcjDIxE:87be11e3bf030e08f1fdc876d90a96568ab00bfc1012cdfe83c9b2e0f2117fd3'
+            'X-Cassandra-Token': process.env.X_Cassandra_Token
 
         }
     }
