@@ -18,28 +18,29 @@ function App() {
 
   const [restaurants, setRestaurants] = useState([]);
   const [search, setSearch] = useState(null)
+  const [map, setMap] = useState(new Map())
+  const [keys , setKeys] = useState([])
 
   const fetchData = async () => {
     const restaurantsData = await axios.get('http://localhost:8000/restaurants')
-    const data = Object.keys(restaurantsData.data.data).map(restaurant => restaurantsData.data.data[restaurant])
-    setRestaurants(data)
-    console.log(data)
+    
 
+    const data = Object.keys(restaurantsData.data.data).map(restaurant => restaurantsData.data.data[restaurant])
+    const keys = Object.keys(restaurantsData.data.data)
+
+    setRestaurants(data)
+    setKeys(keys)
+
+    for (let i = 0; i < keys.length; i++) {
+      setMap(map.set(keys[i], data[i]))
+    }
+    
   }
 
   useEffect(() => {
     fetchData();
     setSearch(" ")
   }, [])
-
-
-  const deleteRestaurant = () => {
-    console.log('Delete Restaurant')
-  }
-
-  const searchRestaurant = (event) => {
-    setSearch(event.target.value)
-  }
 
   let filteredRestaurants = restaurants.filter(
     (restaurant) => {
@@ -49,6 +50,48 @@ function App() {
     return a.id < b.id ? 1 : a.id > b.id ? -1 : 0;
   }
   );
+
+
+  const addMovie = async (newRestaurant) => {
+
+    const baseUrl = 'http://localhost:8000/addRestaurant';
+
+    await axios.post(baseUrl, newRestaurant)
+
+
+    // await axios.post(baseUrl, movie)
+    // this.setState(state => ({
+    //   movies: state.movies.concat([movie])
+    // }
+    // )
+    // )
+    // this.getMovies()
+  }
+  
+
+  const deleteRestaurant = async (deleteRestaurant) => {
+
+    const id = keys[restaurants.indexOf(deleteRestaurant)]
+
+    await axios.delete(`http://localhost:8000/deleteRestaurant/${id}`)
+
+
+    const index = restaurants.indexOf(deleteRestaurant)
+    const newRestaurantList = restaurants.pop(deleteRestaurant)
+
+    setMap(map.delete(keys[index]))
+    setKeys(keys.filter(k => k !== keys[index]))
+
+    setRestaurants(newRestaurantList)
+
+  }
+
+  const searchRestaurant = (event) => {
+    setSearch(event.target.value)
+  }
+
+  
+
 
   return (
 

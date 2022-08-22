@@ -16,9 +16,9 @@ app.use(express.json());
 
 // get all restaurant data 
 
-app.get('/restaurants' , (req,res) => {
+app.get('/restaurants' , async (req,res) => {
     
-    const url = process.env.ENDPOINT;
+    const url = process.env.RESTAURANTLIST;
 
     const options = {
         method: 'GET',
@@ -28,7 +28,52 @@ app.get('/restaurants' , (req,res) => {
 
         }
     }
-    fetch(url , options)
+
+    await fetch(url , options)
+        .then(response => response.json())
+        .then(json => res.json(json))
+        .catch(err => console.log(err))
+} 
+)
+
+app.delete('/deleteRestaurant/:id' , async (req,res) => {
+
+    console.log()
+    
+    const url = process.env.DELETERESTAURANT + req.params.id;
+
+    const options = {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'X-Cassandra-Token': process.env.X_Cassandra_Token
+        }
+    }
+
+    await fetch(url , options)
+        .then(response => response.json())
+        .then(json => res.json(json))
+        .catch(err => console.log(err))
+} 
+)
+
+app.post('/addRestaurant/:id' , async (req,res) => {
+
+    let newRestaurant = req.body;
+
+    const url = process.env.ADDRESTAURANT 
+    
+    const options = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'X-Cassandra-Token': process.env.X_Cassandra_Token ,
+            'Content-Type': 'application/json'
+        } ,
+        body : JSON.stringify(newRestaurant)
+    }
+
+    await fetch(url , options)
         .then(response => response.json())
         .then(json => res.json(json))
         .catch(err => console.log(err))
