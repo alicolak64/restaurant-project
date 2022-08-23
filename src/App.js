@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 
 import axios from 'axios';
 
@@ -11,6 +9,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import SearchBar from './components/SearchBar';
 import RestaurantList from './components/RestaurantList';
 import AddRestaurant from './components/AddRestaurant';
+import EditRestaurant from './components/EditRestaurant';
 
 
 
@@ -45,7 +44,7 @@ function App() {
     setSearch(" ")
   }, [])
 
-  const getMovies = async () => {  // Axios method Local Api   // axios dowload npm i axios
+  const getRestaurants = async () => {  // Axios method Local Api   // axios dowload npm i axios
 
     const restaurantsData = await axios.get('http://localhost:8000/restaurants')
 
@@ -72,6 +71,10 @@ function App() {
   }
   );
 
+  const editRestaurant = async () => {
+    getRestaurants()
+  }
+
 
   const addRestaurant = async (newRestaurant) => {
 
@@ -91,7 +94,7 @@ function App() {
 
     await axios.post(baseUrl, newRestaurant)
 
-    getMovies()
+    getRestaurants()
 
   }
 
@@ -105,7 +108,7 @@ function App() {
     await axios.delete(`http://localhost:8000/deleteRestaurant/${id}`)
 
     const index = restaurants.indexOf(deleteRestaurant)
-    
+
     const newRestaurantList = restaurants.filter(restaurant => restaurant !== deleteRestaurant)
 
     setMap(map.delete(keys[index]))
@@ -165,11 +168,11 @@ function App() {
           />
         } />
 
-        {/* <Route path="/editRestaurant/:id" element={
-            <EditMovie
-              editMovie = {() => { this.editMovie() }}
-            />
-          } /> */}
+        <Route path="/editRestaurant/:id" element={
+          <EditRestaurant
+            editRestaurant={() => { editRestaurant() }}
+          />
+        } />
 
       </Routes>
     </BrowserRouter>
