@@ -16,8 +16,8 @@ app.use(express.json());
 
 // get all restaurant data 
 
-app.get('/restaurants' , async (req,res) => {
-    
+app.get('/restaurants', async (req, res) => {
+
     const url = process.env.RESTAURANTLIST;
 
     const options = {
@@ -29,18 +29,19 @@ app.get('/restaurants' , async (req,res) => {
         }
     }
 
-    await fetch(url , options)
+    await fetch(url, options)
         .then(response => response.json())
         .then(json => res.json(json))
         .catch(err => console.log(err))
-} 
+}
 )
 
-app.delete('/deleteRestaurant/:id' , async (req,res) => {
+app.delete('/deleteRestaurant/:id', async (req, res) => {
 
-    console.log()
-    
     const url = process.env.DELETERESTAURANT + req.params.id;
+
+
+    console.log(url)
 
     const options = {
         method: 'DELETE',
@@ -50,44 +51,48 @@ app.delete('/deleteRestaurant/:id' , async (req,res) => {
         }
     }
 
-    await fetch(url , options)
-        .then(response => response.json())
-        .then(json => res.json(json))
-        .catch(err => console.log(err))
-} 
+    await fetch(url, options)
+        .then(response => {
+            if (response.status === 204) {
+                res.status(204).send()
+            } else {
+                res.status(500).send()
+            }
+        }).catch(err => console.log(err))
+}
 )
 
-app.post('/addRestaurant/:id' , async (req,res) => {
+app.post('/addRestaurant', async (req, res) => {
 
     let newRestaurant = req.body;
 
-    const url = process.env.ADDRESTAURANT 
-    
+    const url = process.env.ADDRESTAURANT
+
     const options = {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
-            'X-Cassandra-Token': process.env.X_Cassandra_Token ,
+            'X-Cassandra-Token': process.env.X_Cassandra_Token,
             'Content-Type': 'application/json'
-        } ,
-        body : JSON.stringify(newRestaurant)
+        },
+        body: JSON.stringify(newRestaurant)
     }
 
-    await fetch(url , options)
+    await fetch(url, options)
         .then(response => response.json())
         .then(json => res.json(json))
         .catch(err => console.log(err))
-} 
+}
 )
 
 
-function notFound (req, res, next) {
+function notFound(req, res, next) {
     res.status(404);
     const error = new Error('Not Found - ');
     next(error);
 }
 
-function errorHandler (err, req, res) {
+function errorHandler(err, req, res) {
     res.status(res.statusCode || 500);
     res.json({
         message: err.message,
@@ -98,7 +103,7 @@ function errorHandler (err, req, res) {
 
 app.use(notFound);
 app.use(errorHandler);
-    
+
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
