@@ -19,22 +19,17 @@ function App() {
   const [restaurants, setRestaurants] = useState([]);
   const [search, setSearch] = useState(null)
   const [map, setMap] = useState(new Map())
-  const [keys, setKeys] = useState([])
-
-  console.log(restaurants)
 
   const fetchData = async () => {
     const restaurantsData = await axios.get('http://localhost:8000/restaurants')
-
 
     const data = Object.keys(restaurantsData.data.data).map(restaurant => restaurantsData.data.data[restaurant])
     const keys = Object.keys(restaurantsData.data.data)
 
     setRestaurants(data)
-    setKeys(keys)
 
     for (let i = 0; i < keys.length; i++) {
-      setMap(map.set(keys[i], data[i]))
+      setMap(map.set( keys[i] , data[i] ))
     }
 
   }
@@ -48,17 +43,17 @@ function App() {
 
     const restaurantsData = await axios.get('http://localhost:8000/restaurants')
 
-
     const data = Object.keys(restaurantsData.data.data).map(restaurant => restaurantsData.data.data[restaurant])
     const keys = Object.keys(restaurantsData.data.data)
 
-    console.log("Data")
-
     setRestaurants(data)
-    setKeys(keys)
+
+    const newMap = map.clear()
+
+    setMap(newMap)
 
     for (let i = 0; i < keys.length; i++) {
-      setMap(map.set(keys[i], data[i]))
+      setMap(map.set( keys[i] , data[i] ))
     }
   }
 
@@ -78,8 +73,6 @@ function App() {
 
   const addRestaurant = async (newRestaurant) => {
 
-    console.log(newRestaurant)
-
     let highId = 0;
 
     for (let i = 0; i < restaurants.length; i++) {
@@ -93,26 +86,37 @@ function App() {
     const baseUrl = 'http://localhost:8000/addRestaurant';
 
     await axios.post(baseUrl, newRestaurant)
+    .then(response => {
+      getRestaurants()
+    }).catch(error => {
+      console.log(error)
+    })
 
-    getRestaurants()
+    
 
   }
 
 
   const deleteRestaurant = async (deleteRestaurant) => {
 
+    let key = ""
 
+    for (const tempKey of map.keys()) {
+      if(map.get(tempKey) === deleteRestaurant) {
+        key = tempKey
+      }
+    }
 
-    const id = keys[restaurants.indexOf(deleteRestaurant)]
+    await axios.delete(`http://localhost:8000/deleteRestaurant/${key}`)
 
-    await axios.delete(`http://localhost:8000/deleteRestaurant/${id}`)
+    
+    let tempMap = map 
 
-    const index = restaurants.indexOf(deleteRestaurant)
+    tempMap.delete(key)
+
+    setMap(tempMap)
 
     const newRestaurantList = restaurants.filter(restaurant => restaurant !== deleteRestaurant)
-
-    setMap(map.delete(keys[index]))
-    setKeys(keys.filter(k => k !== keys[index]))
 
     setRestaurants(newRestaurantList)
 
@@ -156,6 +160,7 @@ function App() {
 
             <RestaurantList
               restaurants={filteredRestaurants}
+              map = {map}
               deleteRestaurantProp={deleteRestaurant}
             />
 
