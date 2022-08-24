@@ -14,9 +14,9 @@ app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
 
-// get all restaurant data 
 
-app.get('/restaurants', async (req, res) => {
+
+app.get('/restaurants', async (req, res) => { // get all restaurants data 
 
     const url = process.env.RESTAURANTLIST;
 
@@ -36,7 +36,7 @@ app.get('/restaurants', async (req, res) => {
 }
 )
 
-app.delete('/deleteRestaurant/:id', async (req, res) => {
+app.delete('/deleteRestaurant/:id', async (req, res) => { // delete restaurant data with document id
 
     const url = process.env.DELETERESTAURANT + req.params.id;
 
@@ -59,7 +59,7 @@ app.delete('/deleteRestaurant/:id', async (req, res) => {
 }
 )
 
-app.post('/addRestaurant', async (req, res) => {
+app.post('/addRestaurant', async (req, res) => { // add restaurant to collection
 
     let newRestaurant = req.body;
 
@@ -83,6 +83,29 @@ app.post('/addRestaurant', async (req, res) => {
         .catch(err => console.log(err))
 
         
+}
+)
+
+app.get('/restaurant/:id', async (req, res) => { // get a restaurant data with document id 
+
+    const url = process.env.GETRESTAURANT + req.params.id;
+
+    console.log(url)
+
+    const options = {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'X-Cassandra-Token': process.env.X_Cassandra_Token
+        }
+    }
+
+    await fetch(url, options)
+        .then(response => response.json())
+        .then(json => res.json(json))
+        .catch(err => console.log(err))
+
+    
 }
 )
 
