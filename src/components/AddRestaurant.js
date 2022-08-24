@@ -136,7 +136,7 @@ const AddRestaurant = (props) => {
                 </div>
                 <div className="form-row">
                     <div className="form-group col-md-12">
-                        <label htmlFor="inputMenu">Manu</label>
+                        <label htmlFor="inputMenu">Menu</label>
                         <textarea
                             className="form-control"
                             name="menu" rows="1"
