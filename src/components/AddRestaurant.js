@@ -39,6 +39,8 @@ const AddRestaurant = (props) => {
             }
         }
 
+        
+
         props.addRestaurant(newRestaurant);
         navigate("/")
     };
@@ -146,7 +148,7 @@ const AddRestaurant = (props) => {
                         ></textarea>
                     </div>
                 </div>
-                <input type="submit" className="btn btn-danger btn-block" value="Add Restaurant" />
+                <input type="submit" className="btn btn-success btn-block" value="Add Restaurant" />
             </form>
         </div>
     )
