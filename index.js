@@ -40,9 +40,6 @@ app.delete('/deleteRestaurant/:id', async (req, res) => {
 
     const url = process.env.DELETERESTAURANT + req.params.id;
 
-
-    console.log(url)
-
     const options = {
         method: 'DELETE',
         headers: {
@@ -78,10 +75,14 @@ app.post('/addRestaurant', async (req, res) => {
         body: JSON.stringify(newRestaurant)
     }
 
+    
+
     await fetch(url, options)
         .then(response => response.json())
         .then(json => res.json(json))
         .catch(err => console.log(err))
+
+        
 }
 )
 
