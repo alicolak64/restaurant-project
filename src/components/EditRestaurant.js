@@ -18,6 +18,7 @@ const EditRestaurant = (props) => {
     const [image, setImage] = useState(" ")
     const [description, setDescription] = useState(" ")
     const [menu, setMenu] = useState(" ")
+    const [cardId, setCardId] = useState(" ")
     const [key, setKey] = useState(" ")
 
     const { id } = useParams();
@@ -36,10 +37,12 @@ const EditRestaurant = (props) => {
 
         const data = restaurantData.data.data
 
+
         const key = restaurantData.data.documentId
 
 
         setKey(key)
+        setCardId(data.id)
         setName(data.name)
         setRate(data.rate)
         setCountry(data.country)
@@ -89,39 +92,30 @@ const EditRestaurant = (props) => {
     }
 
 
-
-
-
-
-
-
-
-
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        // const formRestaurant = serialize(e.target, { hash: true });
 
-        // let menu = []
+        let formMenu = []
 
-        // formRestaurant.menu.trim().split(',').forEach(item => {
-        //     menu.push(item.trim())
-        // } )
+        menu.trim().split(',').forEach(item => {
+            formMenu.push(item.trim())
+        })
 
-        // formRestaurant.menu = menu
 
-        // const newRestaurant = {
-        //     name: formRestaurant.name,
-        //     country: formRestaurant.country,
-        //     description: formRestaurant.description,
-        //     image: formRestaurant.image,
-        //     rate : formRestaurant.rate,
-        //     menu : formRestaurant.menu ,
-        //     location: {
-        //         address: formRestaurant.address,
-        //         zipcode: formRestaurant.zipcode,
-        //         web: formRestaurant.web,
-        //     }
-        // }
+        const updatedRestaurant = {
+            name: name,
+            country: country,
+            description: description,
+            image: image,
+            rate: rate,
+            id: cardId,
+            menu: formMenu,
+            location: {
+                address: address,
+                zipcode: zipcode,
+                web: web,
+            }
+        }
 
         // props.onAddRestaurant(newRestaurant);
         // navigate("/")
@@ -157,13 +151,13 @@ const EditRestaurant = (props) => {
                 <div className="form-row">
                     <div className="form-group col-md-10">
                         <label htmlFor="inputName">Name</label>
-                        <input 
+                        <input
                             type="text"
                             className="form-control"
-                            name="name" 
+                            name="name"
                             onChange={inputChange}
                             value={name}
-                            />
+                        />
                     </div>
                     <div className="form-group col-md-2">
                         <label htmlFor="inputRate">Rate</label>
@@ -171,41 +165,41 @@ const EditRestaurant = (props) => {
                             type="text"
                             className="form-control"
                             name="rate"
-                            value={rate} 
+                            value={rate}
                             onChange={inputChange}
-                            />
+                        />
                     </div>
                 </div>
                 <div className="form-row">
                     <div className="form-group col-md-8">
                         <label htmlFor="inputAddress">Address</label>
-                        <input 
+                        <input
                             type="text"
                             className="form-control"
                             name="address"
-                            value={address} 
+                            value={address}
                             onChange={inputChange}
-                            />
+                        />
                     </div>
                     <div className="form-group col-md-2">
                         <label htmlFor="inputCountry">Counrty</label>
                         <input
                             type="text"
                             className="form-control"
-                            name="country" 
+                            name="country"
                             value={country}
                             onChange={inputChange}
-                            />
+                        />
                     </div>
                     <div className="form-group col-md-2">
                         <label htmlFor="inputZipCode">Zipcode</label>
                         <input
                             type="text"
                             className="form-control"
-                            name="zipcode" 
+                            name="zipcode"
                             value={zipcode}
                             onChange={inputChange}
-                            />
+                        />
                     </div>
                 </div>
                 <div className="form-row">
@@ -214,10 +208,10 @@ const EditRestaurant = (props) => {
                         <input
                             type="text"
                             className="form-control"
-                            name="web" 
+                            name="web"
                             value={web}
                             onChange={inputChange}
-                            />
+                        />
                     </div>
                 </div>
                 <div className="form-row">
@@ -229,7 +223,7 @@ const EditRestaurant = (props) => {
                             name="image"
                             value={image}
                             onChange={inputChange}
-                             />
+                        />
                     </div>
                 </div>
                 <div className="form-row">
@@ -237,11 +231,11 @@ const EditRestaurant = (props) => {
                         <label htmlFor="inputDescripiton">Description</label>
                         <textarea
                             className="form-control"
-                            name="description" 
+                            name="description"
                             rows="1"
                             value={description}
-                            onChange={inputChange} 
-                            ></textarea>
+                            onChange={inputChange}
+                        ></textarea>
                     </div>
                 </div>
                 <div className="form-row">
@@ -249,7 +243,7 @@ const EditRestaurant = (props) => {
                         <label htmlFor="inputMenu">Menu</label>
                         <textarea
                             className="form-control"
-                            name="menu" 
+                            name="menu"
                             rows="1"
                             value={menu}
                             onChange={inputChange}
