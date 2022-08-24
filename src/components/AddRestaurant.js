@@ -15,7 +15,6 @@ const AddRestaurant = (props) => {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log(e)
         const formRestaurant = serialize(e.target, { hash: true });
         
         let menu = []
@@ -39,8 +38,6 @@ const AddRestaurant = (props) => {
                 web: formRestaurant.web,
             }
         }
-
-        console.log(newRestaurant)
 
         props.onAddRestaurant(newRestaurant);
         navigate("/")
