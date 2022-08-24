@@ -92,7 +92,7 @@ const EditRestaurant = (props) => {
     }
 
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
 
         let formMenu = []
@@ -117,8 +117,16 @@ const EditRestaurant = (props) => {
             }
         }
 
-        // props.onAddRestaurant(newRestaurant);
-        // navigate("/")
+    const baseUrl = `http://localhost:8000/editRestaurant/${key}`
+
+    await axios.put(baseUrl, updatedRestaurant)
+    .then(response => {
+        props.editRestaurant();
+        navigate("/")
+    }).catch(error => {
+      console.log(error)
+    })
+        
     };
 
     return (
@@ -250,7 +258,7 @@ const EditRestaurant = (props) => {
                         ></textarea>
                     </div>
                 </div>
-                <input type="submit" className="btn btn-danger btn-block" value="Add Restaurant" />
+                <input type="submit" className="btn btn-success btn-block" value="Edit Restaurant" />
             </form>
         </div>
     )
