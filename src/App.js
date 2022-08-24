@@ -169,7 +169,7 @@ function App() {
 
         <Route path="/addRestaurant" element={
           <AddRestaurant
-            onAddRestaurant={(restaurant) => { addRestaurant(restaurant) }}
+            addRestaurant={(restaurant) => { addRestaurant(restaurant) }}
           />
         } />
 
