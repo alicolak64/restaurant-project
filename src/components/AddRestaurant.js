@@ -39,7 +39,7 @@ const AddRestaurant = (props) => {
             }
         }
 
-        props.onAddRestaurant(newRestaurant);
+        props.addRestaurant(newRestaurant);
         navigate("/")
     };
 
