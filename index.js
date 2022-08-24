@@ -109,6 +109,29 @@ app.get('/restaurant/:id', async (req, res) => { // get a restaurant data with d
 }
 )
 
+app.put('/editRestaurant/:id', async (req, res) => { // edit restaurant data with document id   
+
+    const url = process.env.PUTRESTAURANT + req.params.id;
+
+    const updatedRestaurant = req.body;
+    
+    const options = {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'X-Cassandra-Token': process.env.X_Cassandra_Token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedRestaurant)
+    }
+
+    await fetch(url, options)
+        .then(response => response.json())
+        .then(json => res.json(json))
+        .catch(err => console.log(err))
+}
+)
+
 
 function notFound(req, res, next) {
     res.status(404);
