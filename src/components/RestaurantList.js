@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const RestaurantList = (props) => {
 
-    const trucateOverview = (string, maxLength) => {
+    const truncateOverview = (string, maxLength) => {
 
         if (!string) {
             return null;
@@ -18,6 +18,19 @@ const RestaurantList = (props) => {
             return string;
         }
 
+    }
+
+    const getKey = (restaurant) => {
+
+        let key = ""
+
+        for (const tempKey of props.map.keys()) {
+            if (props.map.get(tempKey) === restaurant) {
+                key = tempKey
+            }
+        }
+
+        return key;
     }
 
     return (
@@ -41,7 +54,7 @@ const RestaurantList = (props) => {
                                 {restaurant.name}
                             </h4>
                             <p className="card-text">
-                                {trucateOverview(restaurant.description, 200)}
+                                {truncateOverview(restaurant.description, 200)}
                             </p>
 
 
@@ -52,14 +65,14 @@ const RestaurantList = (props) => {
 
 
                             <div>
-                                <h5 className="text-warning mx-auto" style = {{width: "70px"}} > Menu </h5>
+                                <h5 className="text-warning mx-auto" style={{ width: "70px" }} > Menu </h5>
                                 <ul className="list-group">
                                     {restaurant.menu.map((menuItem, index) => (
                                         <div key={index}>
                                             <div >
                                                 <li className="list-group-item">{menuItem}</li>
                                             </div>
-                                            
+
                                         </div>
                                     ))}
                                 </ul>
@@ -76,7 +89,7 @@ const RestaurantList = (props) => {
                                 <Link
                                     type="button"
                                     className="btn btn-md btn-outline-primary"
-                                    to={`editRestaurant/${restaurant.id}`}>
+                                    to={`editRestaurant/${getKey(restaurant)}`}>
                                     Edit
                                 </Link>
                                 <h2>
