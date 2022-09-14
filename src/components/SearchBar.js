@@ -25,7 +25,7 @@ const SearchBar = (props) => {
                     <Link
                         to={{ pathname: "/addRestaurant" }}
                         type="button"
-                        className="btn btn-nd btn-danger"
+                        className="btn btn-nd btn-success"
                         style={{ float: 'right' }}
                     >
                         Add Restaurant
