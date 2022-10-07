@@ -26,35 +26,34 @@ const EditRestaurant = (props) => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const fetchRestaurant = async () => {
+
+            const baseUrl = "http://localhost:8000/restaurant/" + id;
+
+            await axios.get(baseUrl)
+                .then(response => {
+                    const data = response.data.data
+                    const key = response.data.documentId
+                    setKey(key)
+                    setCardId(data.id)
+                    setName(data.name)
+                    setRate(data.rate)
+                    setCountry(data.country)
+                    setDescription(data.description)
+                    setAddress(data.location.address)
+                    setZipcode(data.location.zipcode)
+                    setWeb(data.location.web)
+                    setImage(data.image)
+                    setMenu(data.menu.toString())
+                })
+                .catch(error => {
+                    navigate("/")
+                })
+        }
         fetchRestaurant();
-    }, [])
-
-    const fetchRestaurant = async () => {
-
-        const baseUrl = "http://localhost:8000/restaurant/" + id;
-
-        await axios.get(baseUrl)
-            .then(response => {
-                const data = response.data.data
-                const key = response.data.documentId
-                setKey(key)
-                setCardId(data.id)
-                setName(data.name)
-                setRate(data.rate)
-                setCountry(data.country)
-                setDescription(data.description)
-                setAddress(data.location.address)
-                setZipcode(data.location.zipcode)
-                setWeb(data.location.web)
-                setImage(data.image)
-                setMenu(data.menu.toString())
-            })
-            .catch(error => {
-                navigate("/")
-            })
+    }, [id,navigate])
 
 
-    }
 
     const inputChange = (e) => {
         // console.log(e.target.name)
