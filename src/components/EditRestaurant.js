@@ -9,17 +9,17 @@ import axios from 'axios';
 
 const EditRestaurant = (props) => {
 
-    const [name, setName] = useState(" ")
-    const [rate, setRate] = useState(" ")
-    const [address, setAddress] = useState(" ")
-    const [country, setCountry] = useState(" ")
-    const [zipcode, setZipcode] = useState(" ")
-    const [web, setWeb] = useState(" ")
-    const [image, setImage] = useState(" ")
-    const [description, setDescription] = useState(" ")
-    const [menu, setMenu] = useState(" ")
-    const [cardId, setCardId] = useState(" ")
-    const [key, setKey] = useState(" ")
+    const [name, setName] = useState("Loading...")
+    const [rate, setRate] = useState("Loading...")
+    const [address, setAddress] = useState("Loading...")
+    const [country, setCountry] = useState("Loading...")
+    const [zipcode, setZipcode] = useState("Loading...")
+    const [web, setWeb] = useState("Loading...")
+    const [image, setImage] = useState("Loading...")
+    const [description, setDescription] = useState("Loading...")
+    const [menu, setMenu] = useState("Loading...")
+    const [cardId, setCardId] = useState("Loading...")
+    const [key, setKey] = useState("Loading...")
 
     const { id } = useParams();
 
@@ -33,25 +33,26 @@ const EditRestaurant = (props) => {
 
         const baseUrl = "http://localhost:8000/restaurant/" + id;
 
-        const restaurantData = await axios.get(baseUrl)
+        await axios.get(baseUrl)
+            .then(response => {
+                const data = response.data.data
+                const key = response.data.documentId
+                setKey(key)
+                setCardId(data.id)
+                setName(data.name)
+                setRate(data.rate)
+                setCountry(data.country)
+                setDescription(data.description)
+                setAddress(data.location.address)
+                setZipcode(data.location.zipcode)
+                setWeb(data.location.web)
+                setImage(data.image)
+                setMenu(data.menu.toString())
+            })
+            .catch(error => {
+                navigate("/")
+            })
 
-        const data = restaurantData.data.data
-
-
-        const key = restaurantData.data.documentId
-
-
-        setKey(key)
-        setCardId(data.id)
-        setName(data.name)
-        setRate(data.rate)
-        setCountry(data.country)
-        setDescription(data.description)
-        setAddress(data.location.address)
-        setZipcode(data.location.zipcode)
-        setWeb(data.location.web)
-        setImage(data.image)
-        setMenu(data.menu.toString())
 
     }
 
@@ -117,16 +118,16 @@ const EditRestaurant = (props) => {
             }
         }
 
-    const baseUrl = `http://localhost:8000/editRestaurant/${key}`
+        const baseUrl = `http://localhost:8000/editRestaurant/${key}`
 
-    await axios.put(baseUrl, updatedRestaurant)
-    .then(response => {
-        props.editRestaurant();
-        navigate("/")
-    }).catch(error => {
-      console.log(error)
-    })
-        
+        await axios.put(baseUrl, updatedRestaurant)
+            .then(() => {
+                props.editRestaurant();
+                navigate("/")
+            }).catch(error => {
+                console.log(error)
+            })
+
     };
 
     return (
